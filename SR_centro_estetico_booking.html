@@ -1,0 +1,351 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --rose:#c97a8e;--rose-light:#f5e0e6;--rose-dark:#8b4a5e;
+    --cream:#fdf6f0;--warm:#f0e4da;--gold:#b8956a;
+    --txt:#3a2530;--txt2:#7a5a66;--txt3:#b39aa4;
+  }
+  .app{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;color:var(--txt)}
+  .hero{background:linear-gradient(135deg,#f5e0e6 0%,#fdf6f0 50%,#f0e4da 100%);padding:2.5rem 1.5rem 2rem;text-align:center;border-bottom:1px solid #e8d0da}
+  .hero-eyebrow{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--rose);font-size:1rem;letter-spacing:0.05em;margin-bottom:0.4rem}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:400;color:var(--txt);line-height:1.2;margin-bottom:0.3rem}
+  .hero-title span{color:var(--rose-dark)}
+  .hero-sub{font-size:0.85rem;color:var(--txt2);letter-spacing:0.05em;margin-bottom:1.2rem}
+  .tabs{display:flex;gap:0;background:#fff;border:1px solid #e8d0da;border-radius:50px;padding:4px;max-width:360px;margin:0 auto}
+  .tab{flex:1;padding:0.55rem 0.5rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;border:none;background:transparent;cursor:pointer;border-radius:50px;color:var(--txt2);transition:all 0.2s}
+  .tab.active{background:var(--rose);color:#fff}
+  .section{display:none;padding:1.5rem}
+  .section.active{display:block}
+
+  /* SERVICIOS */
+  .cat-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;color:var(--rose-dark);margin:1rem 0 0.7rem;display:flex;align-items:center;gap:8px}
+  .cat-title::after{content:'';flex:1;height:1px;background:#e8d0da}
+  .service-card{background:#fff;border:1px solid #eddce2;border-radius:12px;padding:1rem 1.1rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;transition:border-color 0.2s}
+  .service-card:hover{border-color:var(--rose)}
+  .service-card.selected{border-color:var(--rose);background:#fdf0f3}
+  .svc-info{}
+  .svc-name{font-size:0.92rem;font-weight:500;color:var(--txt);margin-bottom:2px}
+  .svc-dur{font-size:0.75rem;color:var(--txt3)}
+  .svc-right{display:flex;align-items:center;gap:10px}
+  .svc-price{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--rose-dark);white-space:nowrap}
+  .svc-check{width:20px;height:20px;border-radius:50%;border:2px solid #e8d0da;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all 0.2s;flex-shrink:0}
+  .service-card.selected .svc-check{background:var(--rose);border-color:var(--rose);color:#fff}
+  .book-bar{position:sticky;bottom:0;background:#fff;border-top:1px solid #e8d0da;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center}
+  .book-bar.hidden{display:none}
+  .book-info{font-size:0.82rem;color:var(--txt2)}
+  .book-info strong{color:var(--txt);font-size:1rem}
+  .btn-rose{background:var(--rose);color:#fff;border:none;border-radius:50px;padding:0.65rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;transition:background 0.2s}
+  .btn-rose:hover{background:var(--rose-dark)}
+
+  /* CITAS */
+  .form-card{background:#fff;border:1px solid #eddce2;border-radius:12px;padding:1.2rem;margin-bottom:1rem}
+  .form-card h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--rose-dark);margin-bottom:1rem}
+  .form-row{margin-bottom:0.85rem}
+  .form-label{font-size:0.75rem;font-weight:500;color:var(--txt2);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;display:block}
+  .form-input{width:100%;padding:0.6rem 0.8rem;border:1px solid #e8d0da;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--txt);background:#fdf9fb;outline:none;transition:border-color 0.2s}
+  .form-input:focus{border-color:var(--rose)}
+  .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
+  .slot{padding:0.45rem 0;text-align:center;font-size:0.78rem;border:1px solid #e8d0da;border-radius:8px;cursor:pointer;transition:all 0.2s;color:var(--txt2)}
+  .slot:hover{border-color:var(--rose);color:var(--rose)}
+  .slot.active{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:500}
+  .slot.taken{opacity:0.35;pointer-events:none;text-decoration:line-through}
+  .svc-badge{display:inline-flex;align-items:center;gap:4px;background:var(--rose-light);color:var(--rose-dark);font-size:0.75rem;padding:3px 10px;border-radius:50px;margin:3px}
+  .svc-pill-wrap{display:flex;flex-wrap:wrap;gap:2px;margin-top:6px}
+  .no-svc{font-size:0.82rem;color:var(--txt3);font-style:italic;padding:4px 0}
+  .btn-outline{background:transparent;color:var(--rose);border:1px solid var(--rose);border-radius:50px;padding:0.65rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.2s;margin-right:8px}
+  .btn-outline:hover{background:var(--rose-light)}
+  .confirm-box{background:#fdf0f3;border:1px solid #e8c6d0;border-radius:12px;padding:1.2rem;text-align:center}
+  .confirm-icon{font-size:2rem;margin-bottom:0.5rem}
+  .confirm-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--rose-dark)}
+  .confirm-sub{font-size:0.83rem;color:var(--txt2);margin-top:6px}
+
+  /* ADMIN */
+  .admin-card{background:#fff;border:1px solid #eddce2;border-radius:12px;padding:1.2rem;margin-bottom:1rem}
+  .admin-card h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--rose-dark);margin-bottom:1rem}
+  .edit-row{display:flex;gap:8px;align-items:center;margin-bottom:0.6rem}
+  .edit-row .form-input{flex:1}
+  .edit-row .price-input{width:90px;flex-shrink:0}
+  .btn-del{background:transparent;border:none;color:#d4a0a8;font-size:1.1rem;cursor:pointer;padding:4px 6px;border-radius:6px;transition:color 0.2s}
+  .btn-del:hover{color:#c97a8e}
+  .btn-add{background:var(--rose-light);color:var(--rose-dark);border:1px dashed var(--rose);border-radius:8px;padding:0.55rem;font-size:0.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;transition:background 0.2s;margin-top:4px}
+  .btn-add:hover{background:#f0cdd8}
+  .saved-msg{font-size:0.8rem;color:var(--rose-dark);font-weight:500;opacity:0;transition:opacity 0.3s;margin-left:8px}
+  .saved-msg.show{opacity:1}
+  .appt-row{display:flex;justify-content:space-between;align-items:center;padding:0.7rem 0;border-bottom:1px solid #f2e5ea}
+  .appt-row:last-child{border-bottom:none}
+  .appt-name{font-size:0.88rem;font-weight:500;color:var(--txt)}
+  .appt-detail{font-size:0.75rem;color:var(--txt3);margin-top:2px}
+  .appt-time{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--rose-dark);text-align:right}
+  .appt-svc{font-size:0.72rem;color:var(--txt2);text-align:right}
+  .badge-new{background:#e8f5e0;color:#4a7a2a;font-size:0.65rem;padding:2px 7px;border-radius:50px;margin-left:6px;font-weight:500}
+
+  @media(min-width:600px){.slots{grid-template-columns:repeat(5,1fr)}}
+</style>
+
+<div class="app">
+  <div class="hero">
+    <p class="hero-eyebrow">Centro Estético</p>
+    <h1 class="hero-title">Stefany <span>Rosado</span></h1>
+    <p class="hero-sub">Belleza · Bienestar · Riohacha</p>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('servicios')">Servicios</button>
+      <button class="tab" onclick="showTab('citas')">Reservar</button>
+      <button class="tab" onclick="showTab('admin')">Admin</button>
+    </div>
+  </div>
+
+  <!-- SERVICIOS -->
+  <div id="servicios" class="section active">
+    <p class="hero-sub" style="margin-bottom:0.5rem;font-size:0.8rem;color:var(--txt3);padding-top:0.2rem">Selecciona uno o más servicios y reserva tu cita</p>
+
+    <div id="catalog"></div>
+  </div>
+  <div class="book-bar hidden" id="book-bar">
+    <div class="book-info">
+      <span id="bar-count">0 servicio(s)</span><br>
+      <strong id="bar-total">$0</strong>
+    </div>
+    <button class="btn-rose" onclick="goToBooking()">Continuar →</button>
+  </div>
+
+  <!-- CITAS -->
+  <div id="citas" class="section">
+    <div id="booking-form">
+      <div class="form-card">
+        <h3>Servicios elegidos</h3>
+        <div class="svc-pill-wrap" id="chosen-svcs">
+          <p class="no-svc">Aún no has seleccionado servicios</p>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3>Fecha y hora</h3>
+        <div class="form-row">
+          <label class="form-label">Fecha</label>
+          <input type="date" class="form-input" id="appt-date" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">Horario disponible</label>
+          <div class="slots" id="time-slots"></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3>Tus datos</h3>
+        <div class="form-row">
+          <label class="form-label">Nombre completo</label>
+          <input type="text" class="form-input" id="client-name" placeholder="ej. María González" />
+        </div>
+        <div class="form-row">
+          <label class="form-label">WhatsApp</label>
+          <input type="tel" class="form-input" id="client-phone" placeholder="+57 300 000 0000" />
+        </div>
+      </div>
+      <div style="text-align:right;padding-bottom:1.5rem">
+        <button class="btn-outline" onclick="showTab('servicios')">← Volver</button>
+        <button class="btn-rose" onclick="confirmBooking()">Confirmar cita</button>
+      </div>
+    </div>
+    <div class="confirm-box" id="confirm-box" style="display:none">
+      <div class="confirm-icon">✿</div>
+      <p class="confirm-title">¡Cita reservada!</p>
+      <p class="confirm-sub" id="confirm-msg">Te esperamos con mucho cariño.</p>
+      <br>
+      <button class="btn-rose" onclick="resetBooking()" style="margin-top:0.5rem">Nueva reserva</button>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="admin" class="section">
+    <div class="admin-card">
+      <h3>Próximas citas <span class="badge-new">Hoy</span></h3>
+      <div id="appt-list"></div>
+    </div>
+    <div class="admin-card">
+      <h3>Editar servicios</h3>
+      <div id="svc-editor"></div>
+      <button class="btn-add" onclick="addService()">+ Agregar servicio</button>
+      <div style="margin-top:1rem;display:flex;align-items:center">
+        <button class="btn-rose" onclick="saveServices()">Guardar cambios</button>
+        <span class="saved-msg" id="saved-msg">¡Guardado!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let services = [
+  {cat:"Maquillaje",items:[
+    {name:"Maquillaje social",price:60000,dur:"45 min"},
+    {name:"Maquillaje de novia",price:150000,dur:"90 min"},
+    {name:"Maquillaje de fantasía",price:80000,dur:"60 min"},
+  ]},
+  {cat:"Cejas & Pestañas",items:[
+    {name:"Diseño de cejas",price:25000,dur:"30 min"},
+    {name:"Laminado de cejas",price:55000,dur:"45 min"},
+    {name:"Extensión de pestañas",price:90000,dur:"90 min"},
+    {name:"Lifting de pestañas",price:65000,dur:"60 min"},
+  ]},
+  {cat:"Masajes",items:[
+    {name:"Masaje relajante",price:70000,dur:"60 min"},
+    {name:"Masaje descontracturante",price:85000,dur:"60 min"},
+  ]},
+  {cat:"Depilación & Epilación",items:[
+    {name:"Depilación facial",price:20000,dur:"20 min"},
+    {name:"Depilación corporal",price:45000,dur:"40 min"},
+    {name:"Epilación con cera",price:35000,dur:"30 min"},
+  ]},
+];
+
+let selected = [];
+let bookings = [
+  {name:"Laura Pérez",phone:"3001234567",time:"10:00",svcs:"Maquillaje social, Diseño de cejas",date:"Hoy"},
+  {name:"Valentina Díaz",phone:"3109876543",time:"2:00 PM",svcs:"Masaje relajante",date:"Hoy"},
+  {name:"Camila Ruiz",phone:"3157654321",time:"4:30 PM",svcs:"Extensión de pestañas",date:"Mañana"},
+];
+
+const fmt = n => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0}).format(n);
+
+function renderCatalog(){
+  const el = document.getElementById('catalog');
+  el.innerHTML = services.map(cat=>`
+    <p class="cat-title">${cat.cat}</p>
+    ${cat.items.map((s,i)=>{
+      const id = cat.cat+'_'+i;
+      const isSel = selected.find(x=>x.id===id);
+      return `<div class="service-card${isSel?' selected':''}" onclick="toggleSvc('${id}','${s.name}',${s.price},'${s.dur}')">
+        <div class="svc-info">
+          <p class="svc-name">${s.name}</p>
+          <p class="svc-dur">${s.dur}</p>
+        </div>
+        <div class="svc-right">
+          <span class="svc-price">${fmt(s.price)}</span>
+          <span class="svc-check" id="chk_${id}">${isSel?'✓':''}</span>
+        </div>
+      </div>`;
+    }).join('')}
+  `).join('');
+}
+
+function toggleSvc(id,name,price,dur){
+  const idx = selected.findIndex(x=>x.id===id);
+  if(idx>=0) selected.splice(idx,1); else selected.push({id,name,price,dur});
+  renderCatalog();
+  updateBar();
+}
+
+function updateBar(){
+  const bar = document.getElementById('book-bar');
+  if(selected.length===0){bar.classList.add('hidden');return;}
+  bar.classList.remove('hidden');
+  document.getElementById('bar-count').textContent=selected.length+' servicio(s)';
+  document.getElementById('bar-total').textContent=fmt(selected.reduce((a,s)=>a+s.price,0));
+}
+
+function goToBooking(){showTab('citas');}
+
+const ALL_SLOTS=['8:00','9:00','10:00','11:00','12:00','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'];
+const TAKEN_SLOTS=['10:00','2:00 PM'];
+let chosenSlot='';
+
+function renderBookingPanel(){
+  const pw = document.getElementById('chosen-svcs');
+  if(selected.length===0){
+    pw.innerHTML='<p class="no-svc">Aún no has seleccionado servicios</p>';
+  } else {
+    pw.innerHTML=selected.map(s=>`<span class="svc-badge">${s.name} · ${fmt(s.price)}</span>`).join('');
+  }
+  const wrap = document.getElementById('time-slots');
+  wrap.innerHTML=ALL_SLOTS.map(t=>`<div class="slot${TAKEN_SLOTS.includes(t)?' taken':''}${chosenSlot===t?' active':''}" onclick="pickSlot('${t}')">${t}</div>`).join('');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('appt-date').value=today;
+}
+
+function pickSlot(t){chosenSlot=t;renderBookingPanel();}
+
+function confirmBooking(){
+  const name=document.getElementById('client-name').value.trim();
+  const phone=document.getElementById('client-phone').value.trim();
+  const date=document.getElementById('appt-date').value;
+  if(!name||!phone||!chosenSlot||selected.length===0){
+    alert('Por favor completa todos los campos y elige un horario.');return;
+  }
+  bookings.unshift({name,phone,time:chosenSlot,svcs:selected.map(s=>s.name).join(', '),date:'Hoy'});
+  document.getElementById('confirm-msg').textContent=`${name}, tu cita es el ${date} a las ${chosenSlot}. ¡Te esperamos con mucho cariño!`;
+  document.getElementById('booking-form').style.display='none';
+  document.getElementById('confirm-box').style.display='block';
+  selected=[];
+  updateBar();
+  renderAppts();
+}
+
+function resetBooking(){
+  chosenSlot='';
+  document.getElementById('client-name').value='';
+  document.getElementById('client-phone').value='';
+  document.getElementById('booking-form').style.display='block';
+  document.getElementById('confirm-box').style.display='none';
+  renderBookingPanel();
+}
+
+function renderAppts(){
+  const el = document.getElementById('appt-list');
+  if(!bookings.length){el.innerHTML='<p class="no-svc">Sin citas por ahora</p>';return;}
+  el.innerHTML=bookings.slice(0,5).map(b=>`
+    <div class="appt-row">
+      <div>
+        <p class="appt-name">${b.name}</p>
+        <p class="appt-detail">${b.phone}</p>
+        <p class="appt-detail" style="color:var(--txt2);font-size:0.73rem">${b.svcs}</p>
+      </div>
+      <div>
+        <p class="appt-time">${b.time}</p>
+        <p class="appt-svc">${b.date}</p>
+      </div>
+    </div>`).join('');
+}
+
+function renderEditor(){
+  const el = document.getElementById('svc-editor');
+  el.innerHTML=services.map((cat,ci)=>`
+    <p style="font-size:0.75rem;font-weight:500;color:var(--txt2);letter-spacing:0.04em;text-transform:uppercase;margin:0.8rem 0 0.4rem">${cat.cat}</p>
+    ${cat.items.map((s,si)=>`
+      <div class="edit-row">
+        <input class="form-input" value="${s.name}" onchange="services[${ci}].items[${si}].name=this.value" />
+        <input class="form-input price-input" type="number" value="${s.price}" onchange="services[${ci}].items[${si}].price=Number(this.value)" placeholder="Precio" />
+        <button class="btn-del" onclick="services[${ci}].items.splice(${si},1);renderEditor()">✕</button>
+      </div>`).join('')}
+  `).join('');
+}
+
+function addService(){
+  const name=prompt('Nombre del servicio:');
+  if(!name)return;
+  const price=parseInt(prompt('Precio (ej: 50000):')||'0');
+  const catName=prompt('Categoría (Maquillaje / Cejas & Pestañas / Masajes / Depilación & Epilación):') || 'Otros';
+  let cat=services.find(c=>c.cat===catName);
+  if(!cat){services.push({cat:catName,items:[]});cat=services[services.length-1];}
+  cat.items.push({name,price,dur:'30 min'});
+  renderEditor();renderCatalog();
+}
+
+function saveServices(){
+  renderCatalog();
+  const msg=document.getElementById('saved-msg');
+  msg.classList.add('show');
+  setTimeout(()=>msg.classList.remove('show'),2000);
+}
+
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{if(t.textContent.toLowerCase().includes(id.substring(0,3)))t.classList.add('active')});
+  if(id==='citas') renderBookingPanel();
+  if(id==='admin'){renderAppts();renderEditor();}
+}
+
+renderCatalog();
+renderAppts();
+renderEditor();
+</script>
